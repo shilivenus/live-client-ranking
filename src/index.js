@@ -3,15 +3,17 @@ import ReactDOM from 'react-dom';
 import {
   BrowserRouter as Router,
   Route,
-  Link
+  Link,
+  browserHistory
 } from 'react-router-dom';
 
 import App from './App';
 import Map from './scenes/Map';
 import './index.css';
+import ClientDetails from './scenes/ClientDetails'
 
 ReactDOM.render(
-  <Router>
+  <Router history={browserHistory}>
     <div>
       <ul>
         <li><Link to="/">Home</Link></li>
@@ -19,6 +21,7 @@ ReactDOM.render(
       </ul>
       <Route exact path="/" component={App} />
       <Route exact path="/map" component={Map} />
+      <Route path="/map/:id" component={ClientDetails} />
     </div>
   </Router>,
   document.getElementById('root')
