@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { Menu, Dropdown, Table, Icon } from 'antd';
+import 'antd/lib/dropdown/style/css';
+import 'antd/lib/table/style/css';
 import _ from "lodash";
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import MarkerClusterer from "react-google-maps/lib/addons/MarkerClusterer";
@@ -39,6 +42,37 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
     </MarkerClusterer>
   </GoogleMap>
 ));
+
+const columns = [{
+  title: 'Client Name',
+  dataIndex: 'photo_title',
+  key: 'photo_title',
+  render: text => <a href="#">{text}</a>,
+}, {
+  title: 'ECN',
+  dataIndex: 'photo_id',
+  key: 'photo_id',
+}, {
+  title: 'Address',
+  dataIndex: 'owner_name',
+  key: 'owner_name',
+}];
+
+const menu = (
+  <Menu>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">2nd menu item</a>
+    </Menu.Item>
+    <Menu.Item>
+      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3d menu item</a>
+    </Menu.Item>
+  </Menu>
+);
+
+
 
 
 class Map extends Component {
@@ -97,9 +131,14 @@ class Map extends Component {
     render() {
       return (
         <div>
+          <Dropdown overlay={menu}>
+            <a className="ant-dropdown-link" href="#">
+              Hover me <Icon type="down" />
+            </a>
+          </Dropdown>
           <MarkerClustererGoogleMap
             containerElement={
-              <div style={{ height: '1500px' }} />
+              <div style={{ height: '500px' }} />
             }
             mapElement={
               <div style={{ height: '100%' }} />
@@ -108,6 +147,7 @@ class Map extends Component {
             onMarkerClick={this.handleMarkerClick}
             onCloseClick={this.handleCloseClick}
           />
+          <Table columns={columns} dataSource={this.state.markers} />
         </div>
     );
   }

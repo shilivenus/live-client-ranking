@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "antd": "^2.7.2",
     "es6-promise": "^4.1.0",
     "lodash": "^4.17.4",
     "react": "^15.5.4",
