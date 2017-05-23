@@ -15,5 +15,12 @@
   "bugs": {
     "url": "https://github.com/youfei75/live-client-api/issues"
   },
-  "homepage": "https://github.com/youfei75/live-client-api#readme"
+  "homepage": "https://github.com/youfei75/live-client-api#readme",
+  "devDependencies": {
+    "nodemon": "^1.11.0"
+  },
+  "dependencies": {
+    "express": "^4.15.3",
+    "mongoose": "^4.10.2"
+  }
 }
