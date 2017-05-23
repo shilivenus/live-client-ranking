@@ -57,7 +57,6 @@ class Map extends Component {
           let markersWithShowInfo = Array.from(data.photos);
           markersWithShowInfo.forEach(e =>{e.showInfo = false;});
           this.setState({ markers: markersWithShowInfo });
-          console.log(this.state.markers[1]);
         });
     }
 
@@ -100,7 +99,7 @@ class Map extends Component {
         <div>
           <MarkerClustererGoogleMap
             containerElement={
-              <div style={{ height: '1500px', width: '1800px' }} />
+              <div style={{ height: '1500px' }} />
             }
             mapElement={
               <div style={{ height: '100%' }} />
