@@ -1,0 +1,19 @@
+{
+  "name": "liveclientapi",
+  "version": "1.0.0",
+  "description": "liveclientapi",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/youfei75/live-client-api.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/youfei75/live-client-api/issues"
+  },
+  "homepage": "https://github.com/youfei75/live-client-api#readme"
+}
