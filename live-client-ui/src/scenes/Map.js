@@ -26,7 +26,7 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
 
         return (
           <Marker
-            position={{ lat: marker.address.latitude, lng: marker.address.longitude }}
+            position={{ lat: parseFloat(marker.address[0].Latitude), lng: parseFloat(marker.address[0].Longitude) }}
             key={marker._id}
             onClick={onClick}
           >
@@ -77,26 +77,14 @@ class Map extends Component {
 
 
     componentDidMount() {
-      let header = new Headers({
-    'Access-Control-Allow-Origin':'*',
-    'Content-Type': 'multipart/form-data'
-    });
-    //let opt = Object.assign({}, defaultOptions, options); //将默认的参数和传过来的合并在一起
-    let sentData={
-        //method:opt.method,
-        mode: 'cors',
-        header: header,
-        //body:opt.body || ''
-    };
-
-      fetch('http://192.168.28.130:3000/clients', sentData)
+      fetch('http://localhost:3000/clients')
         .then(res => res.json())
         .then(data => {
           let markersWithShowInfo = Array.from(data);
           markersWithShowInfo.forEach(e =>{e.showInfo = false;});
           this.setState({ markers: markersWithShowInfo });
           console.log(data);
-          console.log(this.state.markers);
+          console.log(this.state.markers[1].address[0].Latitude);
         });
     }
 
