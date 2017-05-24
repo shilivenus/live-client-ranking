@@ -61,19 +61,6 @@ const columns = [{
   key: 'owner_name',
 }];
 
-const rowSelection = {
-  onChange: (selectedRowKeys, selectedRows) => {
-    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-  },
-  onSelect: (record, selected, selectedRows) => {
-    console.log(this.state.top);
-    console.log(record, selected, selectedRows);
-  },
-  onSelectAll: (selected, selectedRows, changeRows) => {
-    console.log(selected, selectedRows, changeRows);
-  },
-};
-
 class Map extends Component {
   state = {
       markers: [],
@@ -96,11 +83,6 @@ class Map extends Component {
           this.setState({ markers: markersWithShowInfo });
         });
     }
-
-    // handleMarkerClick(targetMarker) {
-    //   let url = '/map/' + targetMarker.photo_id;
-    //   window.location = url;
-    // }
 
     handleMarkerClick(targetMarker) {
       this.setState({
@@ -140,11 +122,19 @@ class Map extends Component {
     }
 
     handleRowClick(record, index) {
-      console.log(record);
-      console.log(index);
-      console.log(this.state.top);
       record.showInfo = true;
-      this.handleMarkerClick(record);
+      let targetMarker = this.state.markers[index];
+      this.setState({
+        markers: this.state.markers.map(marker => {
+          if (marker === targetMarker) {
+            return {
+              ...marker,
+              showInfo: true,
+            };
+          }
+          return marker;
+        }),
+      });
     }
 
     render() {
