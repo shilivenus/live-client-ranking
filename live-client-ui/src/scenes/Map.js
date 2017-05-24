@@ -33,9 +33,9 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
             {marker.showInfo && (
             <InfoWindow onCloseClick={onCloseClick}>
               <div>
-                <strong>{marker.name}</strong>
+                <strong>{marker.name} {marker.ECN}</strong>
                 <br />
-                <em>The contents of this InfoWindow are actually ReactElements.</em>
+                <em>Active Vans: {marker.activeVans} Account Balance: {marker.accountBalance}</em>
               </div>
             </InfoWindow>
           )}
@@ -48,33 +48,33 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
 
 const columns = [{
   title: 'Client Name',
-  dataIndex: 'photo_title',
-  key: 'photo_title',
+  dataIndex: 'name',
+  key: 'name',
   render: text => <a href="#">{text}</a>,
 }, {
   title: 'ECN',
-  dataIndex: 'photo_id',
-  key: 'photo_id',
+  dataIndex: 'ECN',
+  key: 'ECN',
 }, {
   title: 'Address',
-  dataIndex: 'owner_name',
-  key: 'owner_name',
+  dataIndex: 'address',
+  key: 'address',
+  render: address => `${address.Line1} ${address.Line2} ${address.Line3} ${address.Suburb} ${address.State} ${address.Country}`,
 }];
 
 class Map extends Component {
   state = {
       markers: [],
       top: 10,
-      rankBy: 'balance'
+      orderby: 'accountBalance'
     }
 
     handleMarkerClick = this.handleMarkerClick.bind(this);
     handleCloseClick = this.handleCloseClick.bind(this);
-    handleChange = this.handleChange.bind(this);
+    handleTopChange = this.handleTopChange.bind(this);
+    handleorderbyChange = this.handleorderbyChange.bind(this);
     handleButtonClick = this.handleButtonClick.bind(this);
     handleRowClick = this.handleRowClick.bind(this);
-
-
 
     componentDidMount() {
       fetch('http://localhost:3000/clients')
@@ -83,8 +83,6 @@ class Map extends Component {
           let markersWithShowInfo = Array.from(data);
           markersWithShowInfo.forEach(e =>{e.showInfo = false;});
           this.setState({ markers: markersWithShowInfo });
-          console.log(data);
-          console.log(this.state.markers[1].address[0].Latitude);
         });
     }
 
@@ -116,13 +114,23 @@ class Map extends Component {
       });
     }
 
-    handleChange(value) {
+    handleTopChange(value) {
       this.setState({top: value});
     }
 
+    handleorderbyChange(value) {
+      this.setState({orderby: value});
+    }
+
     handleButtonClick() {
-      console.log(this.state.top);
-      console.log(this.state.rankBy);
+      let url = 'http://localhost:3000/clients?top='+ this.state.top + '&orderby=' + this.state.orderby;
+      fetch(url)
+        .then(res => res.json())
+        .then(data => {
+          let markersWithShowInfo = Array.from(data);
+          markersWithShowInfo.forEach(e =>{e.showInfo = false;});
+          this.setState({ markers: markersWithShowInfo });
+        });
     }
 
     handleRowClick(record, index) {
@@ -144,13 +152,14 @@ class Map extends Component {
     render() {
       return (
         <div>
-          <Select defaultValue="10" style={{ width: 120 }} onChange={this.handleChange}>
+          <Select defaultValue="10" style={{ width: 120 }} onChange={this.handleTopChange}>
             <Option value="10">10</Option>
             <Option value="100">100</Option>
             <Option value="1000">1000</Option>
           </Select>
-          <Select defaultValue="balance" style={{ width: 120 }} allowClear disabled>
-            <Option value="balance">Balance</Option>
+          <Select defaultValue="accountBalance" style={{ width: 120 }} onChange={this.handleorderbyChange}>
+            <Option value="accountBalance">Balance</Option>
+            <Option value="activeVans">Active Vans</Option>
           </Select>
           <Button type="primary" onClick={this.handleButtonClick}>Search</Button>
           <MarkerClustererGoogleMap
