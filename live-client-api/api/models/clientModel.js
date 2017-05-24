@@ -46,10 +46,7 @@ var ClientSchema = new Schema({
     type: Number,
     required: true
   },
-  address: {
-    type: String,
-    required: true
-  }
+  address: [AddressSchema]
 });
 
 module.exports = mongoose.model('Client', ClientSchema);
