@@ -26,14 +26,14 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
 
         return (
           <Marker
-            position={{ lat: marker.latitude, lng: marker.longitude }}
-            key={marker.photo_id}
+            position={{ lat: marker.address.latitude, lng: marker.address.longitude }}
+            key={marker._id}
             onClick={onClick}
           >
             {marker.showInfo && (
             <InfoWindow onCloseClick={onCloseClick}>
               <div>
-                <strong>{marker.owner_name}</strong>
+                <strong>{marker.name}</strong>
                 <br />
                 <em>The contents of this InfoWindow are actually ReactElements.</em>
               </div>
@@ -74,13 +74,29 @@ class Map extends Component {
     handleButtonClick = this.handleButtonClick.bind(this);
     handleRowClick = this.handleRowClick.bind(this);
 
+
+
     componentDidMount() {
-      fetch('https://gist.githubusercontent.com/farrrr/dfda7dd7fccfec5474d3/raw/758852bbc1979f6c4522ab4e92d1c92cba8fb0dc/data.json')
+      let header = new Headers({
+    'Access-Control-Allow-Origin':'*',
+    'Content-Type': 'multipart/form-data'
+    });
+    //let opt = Object.assign({}, defaultOptions, options); //将默认的参数和传过来的合并在一起
+    let sentData={
+        //method:opt.method,
+        mode: 'cors',
+        header: header,
+        //body:opt.body || ''
+    };
+
+      fetch('http://192.168.28.130:3000/clients', sentData)
         .then(res => res.json())
         .then(data => {
-          let markersWithShowInfo = Array.from(data.photos);
+          let markersWithShowInfo = Array.from(data);
           markersWithShowInfo.forEach(e =>{e.showInfo = false;});
           this.setState({ markers: markersWithShowInfo });
+          console.log(data);
+          console.log(this.state.markers);
         });
     }
 
