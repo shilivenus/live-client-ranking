@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { Menu, Dropdown, Table, Icon } from 'antd';
-import 'antd/lib/dropdown/style/css';
+import { Button , Select , Table, Icon } from 'antd';
+import 'antd/lib/select/style/css';
 import 'antd/lib/table/style/css';
+import 'antd/lib/button/style/css';
 import _ from "lodash";
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import MarkerClusterer from "react-google-maps/lib/addons/MarkerClusterer";
 import 'whatwg-fetch';
+
+const Option = Select.Option;
 
 const MarkerClustererGoogleMap = withGoogleMap(props => (
   <GoogleMap
@@ -58,30 +61,31 @@ const columns = [{
   key: 'owner_name',
 }];
 
-const menu = (
-  <Menu>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.alipay.com/">1st menu item</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.taobao.com/">2nd menu item</a>
-    </Menu.Item>
-    <Menu.Item>
-      <a target="_blank" rel="noopener noreferrer" href="http://www.tmall.com/">3d menu item</a>
-    </Menu.Item>
-  </Menu>
-);
-
-
-
+const rowSelection = {
+  onChange: (selectedRowKeys, selectedRows) => {
+    console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
+  },
+  onSelect: (record, selected, selectedRows) => {
+    this.handleMarkerClick(selected);
+    console.log(record, selected, selectedRows);
+  },
+  onSelectAll: (selected, selectedRows, changeRows) => {
+    console.log(selected, selectedRows, changeRows);
+  },
+};
 
 class Map extends Component {
   state = {
-      markers: []
+      markers: [],
+      top: 10,
+      rankBy: 'balance'
     }
 
     handleMarkerClick = this.handleMarkerClick.bind(this);
     handleCloseClick = this.handleCloseClick.bind(this);
+    handleChange = this.handleChange.bind(this);
+    handleButtonClick = this.handleButtonClick.bind(this);
+    //selectTop = this.selectTop.bind(this);
 
 
     componentDidMount() {
@@ -127,15 +131,27 @@ class Map extends Component {
       });
     }
 
+    handleChange(value) {
+      this.setState({top: value});
+    }
+
+    handleButtonClick() {
+      console.log(this.state.top);
+      console.log(this.state.rankBy);
+    }
 
     render() {
       return (
         <div>
-          <Dropdown overlay={menu}>
-            <a className="ant-dropdown-link" href="#">
-              Hover me <Icon type="down" />
-            </a>
-          </Dropdown>
+          <Select defaultValue="10" style={{ width: 120 }} onChange={this.handleChange}>
+            <Option value="10">10</Option>
+            <Option value="100">100</Option>
+            <Option value="1000">1000</Option>
+          </Select>
+          <Select defaultValue="balance" style={{ width: 120 }} allowClear disabled>
+            <Option value="balance">Balance</Option>
+          </Select>
+          <Button type="primary" onClick={this.handleButtonClick}>Search</Button>
           <MarkerClustererGoogleMap
             containerElement={
               <div style={{ height: '500px' }} />
@@ -147,7 +163,7 @@ class Map extends Component {
             onMarkerClick={this.handleMarkerClick}
             onCloseClick={this.handleCloseClick}
           />
-          <Table columns={columns} dataSource={this.state.markers} />
+          <Table columns={columns} rowSelection={rowSelection} dataSource={this.state.markers} />
         </div>
     );
   }
