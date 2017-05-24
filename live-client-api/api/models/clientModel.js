@@ -21,10 +21,10 @@ var AddressSchema = new Schema({
     type: String,
   },
   latitude: {
-    type: Number;    
+    type: Number
   },
   longitude: {
-    type: Number;    
+    type: Number
   }
 });
 
@@ -45,8 +45,11 @@ var ClientSchema = new Schema({
   accountBalance: {
     type: Number,
     required: true
+  },
+  address: {
+    type: String,
+    required: true
   }
-  address: [AddressSchema]
 });
 
-module.exports = mongoose.model('Tasks', ClientSchema);
+module.exports = mongoose.model('Client', ClientSchema);
