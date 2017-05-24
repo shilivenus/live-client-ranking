@@ -33,7 +33,7 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
             {marker.showInfo && (
             <InfoWindow onCloseClick={onCloseClick}>
               <div>
-                <strong>{marker.name} {marker.ECN}</strong>
+                <strong>{marker.Name} {marker.ECN}</strong>
                 <br />
                 <em>Active Vans: {marker.activeVans} Account Balance: {marker.accountBalance}</em>
               </div>
@@ -48,18 +48,22 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
 
 const columns = [{
   title: 'Client Name',
-  dataIndex: 'name',
-  key: 'name',
+  dataIndex: 'Name',
+  key: 'Name',
   render: text => <a href="#">{text}</a>,
 }, {
   title: 'ECN',
   dataIndex: 'ECN',
   key: 'ECN',
 }, {
-  title: 'Address',
-  dataIndex: 'address',
-  key: 'address',
-  render: address => `${address.Line1} ${address.Line2} ${address.Line3} ${address.Suburb} ${address.State} ${address.Country}`,
+  title: 'All Vans Balance',
+  dataIndex: 'AccountBalance',
+  key: 'AccountBalance',
+},
+{
+  title: 'Active Vans Count',
+  dataIndex: 'ActiveVANs',
+  key: 'ActiveVANs',
 }];
 
 class Map extends Component {
@@ -158,10 +162,10 @@ class Map extends Component {
             <Option value="1000">1000</Option>
           </Select>
           <Select defaultValue="accountBalance" style={{ width: 120 }} onChange={this.handleorderbyChange}>
-            <Option value="accountBalance">Balance</Option>
-            <Option value="activeVans">Active Vans</Option>
+            <Option value="accountBalance">All Vans Balance</Option>
+            <Option value="activeVans">Active Vans Count</Option>
           </Select>
-          <Button type="primary" onClick={this.handleButtonClick}>Search</Button>
+          <Button type="primary" onClick={this.handleButtonClick}>Refresh</Button>
           <MarkerClustererGoogleMap
             containerElement={
               <div style={{ height: '500px' }} />
