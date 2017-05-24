@@ -6,7 +6,7 @@ var Client = require('./api/models/clientModel');
 var bodyParser= require('body-parser');
 
 mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/testdb');
+mongoose.connect('mongodb://localhost:27017/Client');
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());

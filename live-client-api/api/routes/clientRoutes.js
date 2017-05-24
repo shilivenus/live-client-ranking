@@ -6,5 +6,5 @@ module.exports = function(app) {
 
 
   // client Routes
-  app.get("/getclients",clientController.getClients);
+  app.get("/clients",clientController.getClients);
 };
