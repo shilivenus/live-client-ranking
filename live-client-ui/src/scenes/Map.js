@@ -66,7 +66,7 @@ const rowSelection = {
     console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
   },
   onSelect: (record, selected, selectedRows) => {
-    this.handleMarkerClick(selected);
+    console.log(this.state.top);
     console.log(record, selected, selectedRows);
   },
   onSelectAll: (selected, selectedRows, changeRows) => {
@@ -85,8 +85,7 @@ class Map extends Component {
     handleCloseClick = this.handleCloseClick.bind(this);
     handleChange = this.handleChange.bind(this);
     handleButtonClick = this.handleButtonClick.bind(this);
-    //selectTop = this.selectTop.bind(this);
-
+    handleRowClick = this.handleRowClick.bind(this);
 
     componentDidMount() {
       fetch('https://gist.githubusercontent.com/farrrr/dfda7dd7fccfec5474d3/raw/758852bbc1979f6c4522ab4e92d1c92cba8fb0dc/data.json')
@@ -140,6 +139,14 @@ class Map extends Component {
       console.log(this.state.rankBy);
     }
 
+    handleRowClick(record, index) {
+      console.log(record);
+      console.log(index);
+      console.log(this.state.top);
+      record.showInfo = true;
+      this.handleMarkerClick(record);
+    }
+
     render() {
       return (
         <div>
@@ -163,7 +170,7 @@ class Map extends Component {
             onMarkerClick={this.handleMarkerClick}
             onCloseClick={this.handleCloseClick}
           />
-          <Table columns={columns} rowSelection={rowSelection} dataSource={this.state.markers} />
+          <Table columns={columns} onRowClick={this.handleRowClick} dataSource={this.state.markers} />
         </div>
     );
   }
