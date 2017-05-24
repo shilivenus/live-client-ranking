@@ -3,28 +3,28 @@ var Schema = mongoose.Schema;
 
 var AddressSchema = new Schema({
   Line1: {
-    type: String,
+    type: String
   },
   Line2: {
-    type: String,
+    type: String
   },
   Line3: {
-    type: String,
+    type: String
   },
   Suburb: {
-    type: String,
+    type: String
   },
   State: {
-    type: String,
+    type: String
   },
   Country: {
-    type: String,
+    type: String
   },
   latitude: {
-    type: Number;    
+    type: Number 
   },
   longitude: {
-    type: Number;    
+    type: Number    
   }
 });
 
@@ -45,8 +45,8 @@ var ClientSchema = new Schema({
   accountBalance: {
     type: Number,
     required: true
-  }
+  },
   address: [AddressSchema]
 });
 
-module.exports = mongoose.model('Tasks', ClientSchema);
+module.exports = mongoose.model('Clients', ClientSchema);
