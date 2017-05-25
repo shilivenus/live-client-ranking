@@ -35,7 +35,7 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
               <div>
                 <strong>{marker.Name} {marker.ECN}</strong>
                 <br />
-                <em>Active Vans: {marker.activeVans} Account Balance: {marker.accountBalance}</em>
+                <em>Active Vans: {marker.ActiveVANs} Account Balance: {marker.AccountBalance}</em>
               </div>
             </InfoWindow>
           )}
@@ -69,8 +69,8 @@ const columns = [{
 class Map extends Component {
   state = {
       markers: [],
-      top: 10,
-      orderby: 'accountBalance'
+      top: 100,
+      orderby: 'AccountBalance'
     }
 
     handleMarkerClick = this.handleMarkerClick.bind(this);
@@ -81,7 +81,8 @@ class Map extends Component {
     handleRowClick = this.handleRowClick.bind(this);
 
     componentDidMount() {
-      fetch('http://localhost:3000/clients')
+      let url = 'http://localhost:3000/clients?top='+ this.state.top + '&orderby=' + this.state.orderby;
+      fetch(url)
         .then(res => res.json())
         .then(data => {
           let markersWithShowInfo = Array.from(data);
@@ -159,7 +160,7 @@ class Map extends Component {
           <Select defaultValue="10" style={{ width: 120 }} onChange={this.handleTopChange}>
             <Option value="10">10</Option>
             <Option value="100">100</Option>
-            <Option value="1000">1000</Option>
+            <Option value="200">200</Option>
           </Select>
           <Select defaultValue="accountBalance" style={{ width: 120 }} onChange={this.handleorderbyChange}>
             <Option value="accountBalance">All Vans Balance</Option>
