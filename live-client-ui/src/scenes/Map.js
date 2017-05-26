@@ -9,22 +9,21 @@ import MarkerClusterer from "react-google-maps/lib/addons/MarkerClusterer";
 import 'whatwg-fetch';
 
 const Option = Select.Option;
+const defaultCen = { lat: 25.0391667, lng: 121.525 }
 
 const MarkerClustererGoogleMap = withGoogleMap(props => (
   <GoogleMap
-    defaultZoom={3}
-    defaultCenter={{ lat: 25.0391667, lng: 121.525 }}
+    defaultZoom={props.zoom}
+    defaultCenter={defaultCen}
+    center = {props.center}
+    panTo = {props.center}
+    zoom={props.zoom}
   >
-    <MarkerClusterer
-      averageCenter
-      enableRetinaIcons
-      gridSize={60}
-    >
+   
       {props.markers.map(marker =>{
         const onClick = () => props.onMarkerClick(marker);
         const onCloseClick = () => props.onCloseClick(marker);
-
-        return (
+        return (    
           <Marker
             position={{ lat: parseFloat(marker.address[0].Latitude), lng: parseFloat(marker.address[0].Longitude) }}
             key={marker._id}
@@ -33,7 +32,7 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
             {marker.showInfo && (
             <InfoWindow onCloseClick={onCloseClick}>
               <div>
-                <strong>{marker.Name} {marker.ECN}</strong>
+                <b>{marker.Name}, {marker.ECN}</b>
                 <br />
                 <em>Active Vans: {marker.ActiveVANs} Account Balance: {marker.AccountBalance}</em>
               </div>
@@ -42,7 +41,7 @@ const MarkerClustererGoogleMap = withGoogleMap(props => (
           </Marker>
         );
       })}
-    </MarkerClusterer>
+    
   </GoogleMap>
 ));
 
@@ -69,8 +68,10 @@ const columns = [{
 class Map extends Component {
   state = {
       markers: [],
-      top: 100,
-      orderby: 'accountbalance'
+      top: 5000,
+      zoom: 3,
+      orderby: 'accountbalance',
+      center: defaultCen
     }
 
     handleMarkerClick = this.handleMarkerClick.bind(this);
@@ -128,19 +129,20 @@ class Map extends Component {
     }
 
     handleButtonClick() {
-      let url = 'http://localhost:3000/clients?top='+ this.state.top + '&orderby=' + this.state.orderby;
+       let url = 'http://localhost:3000/clients?top='+ this.state.top + '&orderby=' + this.state.orderby;
       fetch(url)
         .then(res => res.json())
         .then(data => {
           let markersWithShowInfo = Array.from(data);
           markersWithShowInfo.forEach(e =>{e.showInfo = false;});
-          this.setState({ markers: markersWithShowInfo });
+          this.setState({ markers: markersWithShowInfo,zoom: 3, center:defaultCen });
         });
     }
 
     handleRowClick(record, index) {
       record.showInfo = true;
       let targetMarker = this.state.markers[index];
+      let targetCenter = { lat: parseFloat(targetMarker.address[0].Latitude), lng: parseFloat(targetMarker.address[0].Longitude) }
       this.setState({
         markers: this.state.markers.map(marker => {
           if (marker === targetMarker) {
@@ -151,16 +153,19 @@ class Map extends Component {
           }
           return marker;
         }),
+      zoom: 15,
+      center: targetCenter
       });
     }
 
     render() {
       return (
         <div>
-          <Select defaultValue="10" style={{ width: 120 }} onChange={this.handleTopChange}>
+          <Select defaultValue="5000" style={{ width: 120 }} onChange={this.handleTopChange}>
             <Option value="10">10</Option>
             <Option value="100">100</Option>
-            <Option value="200">200</Option>
+            <Option value="1000">1000</Option>
+            <Option value="5000">All</Option>
           </Select>
           <Select defaultValue="accountBalance" style={{ width: 120 }} onChange={this.handleorderbyChange}>
             <Option value="accountbalance">All Vans Balance</Option>
@@ -177,6 +182,8 @@ class Map extends Component {
             markers={this.state.markers}
             onMarkerClick={this.handleMarkerClick}
             onCloseClick={this.handleCloseClick}
+            zoom={this.state.zoom}
+            center={this.state.center}
           />
           <Table columns={columns} onRowClick={this.handleRowClick} dataSource={this.state.markers} />
         </div>
