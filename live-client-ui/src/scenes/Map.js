@@ -70,7 +70,7 @@ class Map extends Component {
   state = {
       markers: [],
       top: 100,
-      orderby: 'AccountBalance'
+      orderby: 'accountbalance'
     }
 
     handleMarkerClick = this.handleMarkerClick.bind(this);
@@ -163,8 +163,8 @@ class Map extends Component {
             <Option value="200">200</Option>
           </Select>
           <Select defaultValue="accountBalance" style={{ width: 120 }} onChange={this.handleorderbyChange}>
-            <Option value="accountBalance">All Vans Balance</Option>
-            <Option value="activeVans">Active Vans Count</Option>
+            <Option value="accountbalance">All Vans Balance</Option>
+            <Option value="activevans">Active Vans Count</Option>
           </Select>
           <Button type="primary" onClick={this.handleButtonClick}>Refresh</Button>
           <MarkerClustererGoogleMap
